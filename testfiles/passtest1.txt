@@ -1,0 +1,39 @@
+int theidfunc(int i)
+{;;
+    float f ;
+float A[2], B[3];
+int C, D;
+int E[4];
+f= i;
+    return f;
+}
+
+int faccctorial(int n)
+{
+    if (n < 2) return 1;
+    return n * faccctorial(n-1);
+}
+
+float basicrecfunc(float fafafa)
+{
+    if (fafafa < 1) return 1;
+    return fafafa * basicrecfunc(fafafa - 1);
+}
+
+int main(void)
+{
+    printf("Hello World\n");
+    int one ;
+one= 1;
+    printf("%d\n", theidfunc(one));
+    printf("%d\n", faccctorial(6));
+    printf("%f\n", basicrecfunc(6));
+    float two;
+two = basicrecfunc(6.2);
+    printf("%f\n", two);
+    one = two;
+    printf("%d\n", one);
+    
+
+    return 0;
+}
