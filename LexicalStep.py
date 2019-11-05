@@ -27,7 +27,7 @@ def sub_count(top, do_i_cont, l, start=1):
     return i
 
 class Lex:
-    def __init__(self, file, simple=False):
+    def __init__(self, file, simple=True):
         self.file = file
         self.buffer = []
         self.simple = simple
@@ -228,12 +228,9 @@ class Lex:
         elif top == 'printf' and not self.simple: return Token(TokPrintf)
         return Token(TokId, top)
 
-
-def main():
-    input_file = open("testfiles/faillex1.txt")
-    lex = Lex(input_file)
-
-    ln = 0
+def print_lex_to_console(lex):
+    ln = 1
+    print(ln, '. ', sep='', end='')
     for token in lex:
         if isinstance(token, Token):
             if not token.data == None:
@@ -241,12 +238,19 @@ def main():
             elif token.type == TokNewline:
                 print('')
                 ln = ln + 1
+                print(ln, '. ', sep='', end='')
             elif token.type == TokError:
                 print("\nLexError:", token.data, "at", ln, "\n")
                 raise Exception
             else:
                 print(token.type, end=' ')
         else: raise Exception
+
+def main():
+    input_file = open("testfiles/faillex1.txt")
+    lex = Lex(input_file)
+
+    print_lex_to_console(lex)
     
 
 if __name__ == "__main__":
