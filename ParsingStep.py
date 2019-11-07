@@ -19,7 +19,7 @@ class Par:
 
     def sub_next_token(self):
         try:
-            token = self.lex.next()
+            token = next(self.lex)
         except StopIteration:
             return Token(TokEOF)
         if token.type == TokError:
@@ -147,7 +147,7 @@ class Par:
     def match_instr(self):
         tt = self.top_token().type
         if tt == TokSemicol: return ParsedInst4(self.line_num)
-        elif tt == TokInt or tt == TokFloat: return self.match_decl()
+        elif tt == TokInt or tt == TokFloat: return self.match_decl_1107()
         else: return self.match_expr()
 
     def match_expr(self):
@@ -267,6 +267,30 @@ class Par:
         self.next_token()
         return factor2
 
+    def sub_match_decl(self):
+        token = self.next_token()
+        if token.type != TokId: self.report_parsing_exception("Expected variable name")
+        name = token.data
+        size = None
+        if self.top_token().type == TokLbrack:
+            self.next_token()
+            if self.top_token().type != TokNum: self.report_parsing_exception("Size of array must be integer type")
+            size = str(self.next_token().data)
+            if self.next_token().type != TokRbrack: self.report_parsing_exception("Expected closing brackets")
+        return self.top_token().type == TokComma, name, size
+
+    def match_decl_1107(self):
+        decl2 = ParsedInst2(self.line_num)
+        decl2.declares_int = self.next_token().type == TokInt
+
+        has_more = True
+        while has_more:
+            has_more, name, size = self.sub_match_decl()
+            decl2.declarations.append((name, size))
+            if has_more: self.next_token()
+        
+        return decl2
+
 
     def match_decl(self):
         declares_int = self.top_token().type == TokInt
@@ -364,7 +388,7 @@ class Par:
 
 
 def main():
-    input_file = open("testfiles/passtest92.txt")
+    input_file = open("testfiles/passtest94.txt")
     lex = Lex(input_file, True)
     par = Par(lex, True)
     goal = par.jobsworth()
