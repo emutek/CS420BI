@@ -122,7 +122,9 @@ class Par:
         forst.update = self.match_expr()
         if self.next_token().type != TokRparen:
             self.report_parsing_exception("What were you born in a barn or something?")
-        forst.stmt = self.match_stmt()
+        actual_scope = ParsedStmt4(self.line_num)
+        actual_scope.stmts.append(self.match_stmt())
+        forst.stmt = actual_scope
         return forst
 
     def match_ifst(self):
