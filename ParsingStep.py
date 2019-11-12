@@ -275,7 +275,7 @@ class Par:
         if self.top_token().type == TokLbrack:
             self.next_token()
             if self.top_token().type != TokNum: self.report_parsing_exception("Size of array must be integer type")
-            size = str(self.next_token().data)
+            size = int(self.next_token().data)
             if self.next_token().type != TokRbrack: self.report_parsing_exception("Expected closing brackets")
         return self.top_token().type == TokComma, name, size
 
