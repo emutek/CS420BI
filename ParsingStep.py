@@ -122,9 +122,9 @@ class Par:
         forst.update = self.match_expr()
         if self.next_token().type != TokRparen:
             self.report_parsing_exception("What were you born in a barn or something?")
-        actual_scope = ParsedStmt4(self.line_num)
-        actual_scope.stmts.append(self.match_stmt())
-        forst.stmt = actual_scope
+        forst.stmt = self.match_stmt()
+        if forst.stmt.type == ParsedInst2:
+            self.report_parsing_exception("Apparently in C, declarations are not statements")
         return forst
 
     def match_ifst(self):
@@ -136,6 +136,8 @@ class Par:
         if self.next_token().type != TokRparen:
             self.report_parsing_exception("What were you born in a cave?")
         ifst.stmt = self.match_stmt()
+        if ifst.stmt.type == ParsedInst2:
+            self.report_parsing_exception("Apparently in C, declarations are not statements")
         return ifst
 
     def match_retst(self):
